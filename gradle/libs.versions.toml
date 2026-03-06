@@ -18,6 +18,13 @@ appcompat = "1.7.1"
 material = "1.13.0"
 
 [libraries]
+# Gradle plugins (for build-logic)
+android-gradlePlugin = { group = "com.android.tools.build", name = "gradle", version.ref = "agp" }
+kotlin-gradlePlugin = { group = "org.jetbrains.kotlin", name = "kotlin-gradle-plugin", version.ref = "kotlin" }
+ksp-gradlePlugin = { group = "com.google.devtools.ksp", name = "com.google.devtools.ksp.gradle.plugin", version.ref = "ksp" }
+compose-gradlePlugin = { group = "org.jetbrains.kotlin", name = "compose-compiler-gradle-plugin", version.ref = "kotlin" }
+
+# AndroidX
 androidx-compose-material-icons-extended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -48,3 +55,11 @@ hilt = { id = "com.google.dagger.hilt.android", version.ref = "hilt" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }
 android-library = { id = "com.android.library", version.ref = "agp" }
+
+# Convention plugins
+gigboard-android-application = { id = "gigboard.android.application", version = "unspecified" }
+gigboard-android-library = { id = "gigboard.android.library", version = "unspecified" }
+gigboard-android-feature = { id = "gigboard.android.feature", version = "unspecified" }
+gigboard-android-compose = { id = "gigboard.android.compose", version = "unspecified" }
+gigboard-android-hilt = { id = "gigboard.android.hilt", version = "unspecified" }
+gigboard-jvm-library = { id = "gigboard.jvm.library", version = "unspecified" }

@@ -1,13 +1,4 @@
 plugins {
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.gigboard.jvm.library)
 }
 
-android {
-    namespace = "com.gigboard.core.model"
-
-    compileSdk = 36
-}
-
-dependencies {
-    implementation(libs.androidx.core.ktx)
-}

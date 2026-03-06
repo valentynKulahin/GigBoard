@@ -4,11 +4,10 @@ plugins {
 }
 
 android {
-    namespace = "com.gigboard.service.tracking"
+    namespace = "com.gigboard.core.domain"
 }
 
 dependencies {
     implementation(project(":core:model"))
-    implementation(project(":core:common"))
     implementation(project(":core:data"))
 }

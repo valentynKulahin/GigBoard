@@ -1,34 +1,15 @@
 plugins {
-    alias(libs.plugins.android.library)
-    alias(libs.plugins.kotlin.compose)
-    alias(libs.plugins.hilt)
-    alias(libs.plugins.ksp)
+    alias(libs.plugins.gigboard.android.feature)
 }
 
 android {
     namespace = "com.gigboard.feature.home"
-
-    compileSdk = 36
-
-    buildFeatures {
-        compose = true
-    }
 }
 
+// Зависимости на :core:model, :core:designsystem, :core:common, :core:data
+// уже подключены через AndroidFeatureConventionPlugin.
+// Здесь добавляй только специфичные для этого feature зависимости.
 dependencies {
-    implementation(project(":core:model"))
-    implementation(project(":core:common"))
-    implementation(project(":core:data"))
-    implementation(project(":core:designsystem"))
-
-    implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.lifecycle.runtime)
-    implementation(libs.lifecycle.viewmodel)
-    implementation(libs.androidx.compose.material)
-    implementation(libs.hilt.android)
-    ksp(libs.hilt.compiler)
-    implementation(libs.hilt.navigation)
+    // пример: если home нужен доступ к БД напрямую
+    // implementation(project(":core:database"))
 }
