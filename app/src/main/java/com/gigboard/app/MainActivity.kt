@@ -18,7 +18,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import com.gigboard.app.navigation.GigBoardNavHost
 import com.gigboard.core.designsystem.theme.GigBoardTheme
 import com.gigboard.core.designsystem.theme.ThemeMode
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

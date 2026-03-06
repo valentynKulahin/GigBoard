@@ -11,5 +11,5 @@ android {
 // Здесь добавляй только специфичные для этого feature зависимости.
 dependencies {
     // пример: если home нужен доступ к БД напрямую
-    // implementation(project(":core:database"))
+    implementation(project(":core:domain"))
 }
