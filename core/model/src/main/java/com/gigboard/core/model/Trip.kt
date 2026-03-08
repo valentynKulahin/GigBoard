@@ -1,13 +1,13 @@
 package com.gigboard.core.model
 
 data class Trip(
-    val id: String,
+    val id: Long,
     val platform: GigPlatform?,
     val type: TripType,
     val fromArea: String,
     val toArea: String,
-    val startTime: String,
-    val endTime: String,
+    val startTime: Long,
+    val endTime: Long,
     val miles: Double,
     val earnings: Double,
     val routePoints: List<LatLng> = emptyList(),
