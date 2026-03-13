@@ -8,6 +8,8 @@ import javax.inject.Inject
 class GetDailySummaryUseCase @Inject constructor(
     private val dashboardRepository: DashboardRepository,
 ) {
+
     operator fun invoke(): Flow<DailySummary> =
         dashboardRepository.getDailySummary()
+
 }

@@ -1,5 +1,6 @@
 package com.gigboard.feature.trips
 
+import android.R.attr.action
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
@@ -27,130 +28,51 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.gigboard.core.model.GigPlatform
 import com.gigboard.core.model.Trip
-import com.gigboard.feature.trips.component.TripHistoryRow
-import com.gigboard.feature.trips.component.TripsFilterPanel
-import com.gigboard.feature.trips.component.TripsHeader
-import com.gigboard.feature.trips.component.TripsToolbar
 
 @Composable
 fun TripsScreen(
     viewModel: TripsViewModel = hiltViewModel(),
 ) {
-    val state by viewModel.uiState.collectAsState()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    TripsContent(
-        uiState = state,
-        onAction = viewModel::onAction,
-    )
+    when (val state = uiState) {
+        is TripsUiState.Loading -> TripsLoading()
+        is TripsUiState.Success -> TripsContent(trips = state.tripsSummary)
+        is TripsUiState.Error -> TripsError(message = state.message)
+    }
 }
 
 @Composable
-internal fun TripsContent(
-    uiState: TripsUiState,
-    onAction: (TripsAction) -> Unit,
+private fun TripsLoading() {
+
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text("Loading...", color = MaterialTheme.colorScheme.onSurfaceVariant)
+    }
+
+}
+
+@Composable
+private fun TripsError(message: String) {
+
+    Box(Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+        Text(message, color = MaterialTheme.colorScheme.error)
+    }
+
+}
+
+@Composable
+private fun TripsContent(
+    trips: List<Trip>
 ) {
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.background),
     ) {
-        TripsHeader(count = uiState.visibleTrips.size)
 
-        TripsToolbar(
-            apps = uiState.appFilters,
-            selectedApp = uiState.selectedApp,
-            filtersExpanded = uiState.filtersExpanded,
-            onAppSelected = { onAction(TripsAction.SelectApp(it)) },
-            onToggleFilters = { onAction(TripsAction.ToggleFilters) },
-            modifier = Modifier.padding(horizontal = 16.dp),
-        )
-
-        AnimatedVisibility(visible = uiState.filtersExpanded) {
-            TripsFilterPanel(
-                selectedScope = uiState.selectedScope,
-                currentScopeValue = uiState.currentScopeValue,
-                onScopeSelected = { onAction(TripsAction.SelectScope(it)) },
-                onPreviousValue = { onAction(TripsAction.StepScopeValuePrevious) },
-                onNextValue = { onAction(TripsAction.StepScopeValueNext) },
-                onClearFilters = { onAction(TripsAction.ClearFilters) },
-                modifier = Modifier
-                    .padding(horizontal = 16.dp)
-                    .padding(top = 6.dp),
-            )
-        }
-
-        TripsHistoryCard(
-            trips = uiState.visibleTrips,
-            currentScopeValue = uiState.currentScopeValue,
-            expandedTripId = uiState.expandedTripId,
-            filtersExpanded = uiState.filtersExpanded,
-            onTripToggle = { onAction(TripsAction.ToggleTripExpansion(it)) },
-            modifier = Modifier.weight(1f),
-        )
-    }
-}
-
-@Composable
-private fun TripsHistoryCard(
-    trips: List<Trip>,
-    currentScopeValue: String,
-    expandedTripId: Long?,
-    filtersExpanded: Boolean,
-    onTripToggle: (Long) -> Unit,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        modifier = modifier
-            .padding(horizontal = 16.dp)
-            .padding(top = if (filtersExpanded) 8.dp else 12.dp),
-        shape = androidx.compose.foundation.shape.RoundedCornerShape(16.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant),
-        border = BorderStroke(1.dp, MaterialTheme.colorScheme.outline),
-    ) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 14.dp, vertical = 12.dp),
-                horizontalArrangement = Arrangement.SpaceBetween,
-                verticalAlignment = Alignment.CenterVertically,
-            ) {
-                Text(
-                    text = "Trip history",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    fontWeight = FontWeight.SemiBold,
-                )
-                Text(
-                    text = currentScopeValue,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                )
-            }
-
-            if (trips.isEmpty()) {
-                Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text(
-                        text = "No trips for these filters",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    )
-                }
-            } else {
-                LazyColumn(
-                    modifier = Modifier.fillMaxSize(),
-                    contentPadding = WindowInsets.navigationBars.asPaddingValues(),
-                ) {
-                    items(trips, key = { it.id }) { trip ->
-                        TripHistoryRow(
-                            trip = trip,
-                            expanded = expandedTripId == trip.id,
-                            onToggle = { onTripToggle(trip.id) },
-                        )
-                    }
-                }
-            }
-        }
     }
 }
