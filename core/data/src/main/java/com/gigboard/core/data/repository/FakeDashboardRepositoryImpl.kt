@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 import javax.inject.Inject
 
-class FakeDashboardRepository @Inject constructor() : DashboardRepository {
+class FakeDashboardRepositoryImpl @Inject constructor() : DashboardRepository {
 
     override fun getDailySummary(): Flow<DailySummary> = flowOf(
         DailySummary(

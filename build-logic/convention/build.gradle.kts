@@ -5,6 +5,7 @@ plugins {
 dependencies {
     compileOnly(libs.android.gradlePlugin)
     compileOnly(libs.kotlin.gradlePlugin)
+    compileOnly(libs.kotlin.serialization.gradlePlugin)
     compileOnly(libs.ksp.gradlePlugin)
     compileOnly(libs.compose.gradlePlugin)
 }
@@ -34,6 +35,10 @@ gradlePlugin {
         register("jvmLibrary") {
             id = "gigboard.jvm.library"
             implementationClass = "JvmLibraryConventionPlugin"
+        }
+        register("androidSerialization") {
+            id = "gigboard.android.serialization"
+            implementationClass = "AndroidSerializationConventionPlugin"
         }
     }
 }

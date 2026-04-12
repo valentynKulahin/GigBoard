@@ -20,7 +20,15 @@ import com.gigboard.feature.home.component.PlatformBreakdownCard
 import com.gigboard.feature.home.component.StatsRow
 
 @Composable
-fun HomeScreen(
+fun HomeRoute(
+    modifier: Modifier = Modifier,
+    viewModel: HomeViewModel = hiltViewModel(),
+) {
+    HomeScreen(viewModel = viewModel)
+}
+
+@Composable
+internal fun HomeScreen(
     viewModel: HomeViewModel = hiltViewModel(),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()

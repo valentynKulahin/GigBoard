@@ -1,15 +1,18 @@
 plugins {
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.gigboard.android.library)
+    alias(libs.plugins.gigboard.android.hilt)
+    alias(libs.plugins.gigboard.android.serialization)
 }
 
 android {
     namespace = "com.gigboard.core.database"
-
-    compileSdk = 36
 }
 
 dependencies {
     implementation(project(":core:model"))
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
 }

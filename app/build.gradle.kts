@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.gigboard.android.application)
     alias(libs.plugins.gigboard.android.compose)
@@ -11,6 +13,11 @@ android {
         applicationId = "com.gigboard.app"
         versionCode = 1
         versionName = "1.0"
+
+        val props = Properties().apply {
+            rootProject.file("local.properties").inputStream().use { load(it) }
+        }
+        manifestPlaceholders["MAPS_API_KEY"] = props.getProperty("MAPS_API_KEY", "")
     }
 
     buildTypes {

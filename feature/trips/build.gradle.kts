@@ -12,4 +12,6 @@ android {
 dependencies {
     // пример: если home нужен доступ к БД напрямую
     implementation(project(":core:domain"))
+    implementation(project(":core:maps"))
+    implementation(project(":core:designsystem"))
 }

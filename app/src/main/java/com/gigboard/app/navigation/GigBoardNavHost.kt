@@ -15,10 +15,13 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.gigboard.core.designsystem.theme.ThemeMode
-import com.gigboard.feature.home.HomeScreen
-import com.gigboard.feature.map.MapScreen
-import com.gigboard.feature.settings.SettingsScreen
-import com.gigboard.feature.trips.TripsScreen
+import com.gigboard.feature.home.HomeRoute
+import com.gigboard.feature.map.MapRoute
+import com.gigboard.feature.settings.SettingsRoute
+import com.gigboard.feature.trips.TripsRoute
+import com.gigboard.feature.settings.ConnectedPlatformsRoute
+import com.gigboard.feature.settings.navigation.CONNECTED_PLATFORMS_ROUTE
+import com.gigboard.feature.settings.navigation.ADVANCED_SETTINGS_ROUTE
 
 @Composable
 fun GigBoardNavHost(
@@ -32,20 +35,31 @@ fun GigBoardNavHost(
     Scaffold(
         containerColor = MaterialTheme.colorScheme.background,
         bottomBar = {
-            NavigationBar(containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f), tonalElevation = 0.dp) {
+            NavigationBar(
+                containerColor = MaterialTheme.colorScheme.surface.copy(alpha = 0.95f),
+                tonalElevation = 0.dp
+            ) {
                 TopLevelDestination.entries.forEach { destination ->
-                    val selected = currentDestination?.hierarchy?.any { it.route == destination.route } == true
+                    val selected =
+                        currentDestination?.hierarchy?.any { it.route == destination.route } == true
                     NavigationBarItem(
                         selected = selected,
                         onClick = {
                             navController.navigate(destination.route) {
-                                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
                                 launchSingleTop = true
                                 restoreState = true
                             }
                         },
                         icon = { Icon(destination.icon, contentDescription = destination.label) },
-                        label = { Text(destination.label, style = MaterialTheme.typography.bodySmall) },
+                        label = {
+                            Text(
+                                destination.label,
+                                style = MaterialTheme.typography.bodySmall
+                            )
+                        },
                         colors = NavigationBarItemDefaults.colors(
                             selectedIconColor = MaterialTheme.colorScheme.primary,
                             selectedTextColor = MaterialTheme.colorScheme.primary,
@@ -65,10 +79,29 @@ fun GigBoardNavHost(
             enterTransition = { EnterTransition.None },
             exitTransition = { ExitTransition.None },
         ) {
-            composable(TopLevelDestination.HOME.route) { HomeScreen() }
-            composable(TopLevelDestination.TRIPS.route) { TripsScreen() }
-            composable(TopLevelDestination.MAP.route) { MapScreen() }
-            composable(TopLevelDestination.SETTINGS.route) { SettingsScreen(currentThemeMode, onThemeChanged) }
+            composable(TopLevelDestination.HOME.route) { HomeRoute() }
+            composable(TopLevelDestination.TRIPS.route) { TripsRoute() }
+            composable(TopLevelDestination.MAP.route) { MapRoute() }
+            composable(TopLevelDestination.SETTINGS.route) {
+                SettingsRoute(
+                    onThemeChanged = onThemeChanged,
+                    currentThemeMode = currentThemeMode,
+                    onConnectedPlatformsClick = {
+                        navController.navigate(CONNECTED_PLATFORMS_ROUTE)
+                    },
+                    onAdvancedClick = { navController.navigate(ADVANCED_SETTINGS_ROUTE) }
+                )
+            }
+            composable(CONNECTED_PLATFORMS_ROUTE) {
+                ConnectedPlatformsRoute(
+                    onBack = { navController.popBackStack() },
+                )
+            }
+            composable(ADVANCED_SETTINGS_ROUTE) {
+                ConnectedPlatformsRoute(
+                    onBack = { navController.popBackStack() },
+                )
+            }
         }
     }
 }
